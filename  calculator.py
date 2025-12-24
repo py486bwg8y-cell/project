@@ -30,7 +30,7 @@ elif operation == ':' :
      print("Ошибка")
 
 elif operation == '' :
-    a = float(input("число возмодимое в степень"))  
+    a = float(input("число возводимое в степень"))  
     b = float(input("степень"))
     result = a ** b
     print(f"результат возведения в степень: {result:g}")
