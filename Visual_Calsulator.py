@@ -127,10 +127,11 @@ root.configure(bg='lightgray')
 
 root.eval('tk::PlaceWindow . center')
 
-input_field = Entry(root, font=('Arial', 18), width=22, justify=RIGHT, 
+input_field = Entry(root, font=('Arial', 25), width=22, justify=RIGHT, 
                    relief=SOLID, bd=2, bg='white', fg='black')
-input_field.insert(0, "0")  
-input_field.grid(row=0, column=0, columnspan=4, padx=20, pady=20, sticky="ew")
+input_field.grid(row=0, column=0, columnspan=4, padx=20, pady=20, 
+                 sticky="ew", ipady=20, ipadx=10)
+
 
 special_buttons = [
     ('⌦', backspace, 1, 0),
@@ -147,16 +148,15 @@ normal_buttons = [
     ('1', 4, 0), ('2', 4, 1), ('3', 4, 2), ('+', 4, 3),
     ('0', 5, 1), ('.', 5, 2)
 ]
-
-
 for text, func, row, col in special_buttons:
-    Button(root, text=text, padx=25, pady=25, font=('Arial', 16),
+
+    Button(root, text=text, padx=20, pady=20, font=('Arial', 22),
            command=func, bg='white', relief=RAISED, bd=2)\
     .grid(row=row, column=col, padx=3, pady=3, sticky="nsew")
 
-
 for text, row, col in normal_buttons:
-    Button(root, text=text, padx=25, pady=25, font=('Arial', 16),
+
+    Button(root, text=text, padx=20, pady=20, font=('Arial', 22),
            command=lambda t=text: click_button(t), 
            bg='white', relief=RAISED, bd=2)\
     .grid(row=row, column=col, padx=3, pady=3, sticky="nsew")
