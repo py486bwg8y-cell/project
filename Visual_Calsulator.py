@@ -1,4 +1,5 @@
 from tkinter import *
+from tkinter import ttk
 
 current_expression = ""
 input_field = None  
@@ -20,7 +21,6 @@ def clear():
     input_field.insert(0, "0")
 
 def backspace():
-    
     global current_expression, input_field
     if current_expression:
         current_expression = current_expression[:-1]
@@ -28,7 +28,6 @@ def backspace():
         input_field.insert(0, current_expression or "0")
 
 def percent():
-
     global current_expression, input_field, last_result
     try:
         if current_expression:
@@ -43,7 +42,6 @@ def percent():
         input_field.insert(0, "Ошибка")
 
 def plus_minus():
-
     global current_expression, input_field
     try:
         if current_expression:
@@ -60,13 +58,11 @@ def calculate():
     
     operation = current_expression.strip()
     result = None 
-    
 
     if operation in ['+', '-']:
         input_field.delete(0, END)
         input_field.insert(0, f"{last_result or '0'}{operation} (введите число)")
         return
-        
 
     if '+' in operation and operation.count('+') == 1:
         try:
@@ -123,15 +119,30 @@ def calculate():
 root = Tk()
 root.title("Калькулятор")
 root.geometry("500x700")
-root.configure(bg='lightgray')
+root.configure(bg='#494949')
 
 root.eval('tk::PlaceWindow . center')
 
-input_field = Entry(root, font=('Arial', 25), width=22, justify=RIGHT, 
-                   relief=SOLID, bd=2, bg='white', fg='black')
-input_field.grid(row=0, column=0, columnspan=4, padx=20, pady=20, 
-                 sticky="ew", ipady=20, ipadx=10)
+style = ttk.Style()
+style.theme_use('clam')
+style.configure('Special.TButton', background="#646464", foreground='white', 
+                font=('Arial', 25, 'bold'), borderwidth=0)
+style.configure('Normal.TButton', background='#646464', foreground='white', 
+                font=('Arial', 25, 'bold'), borderwidth=0)
+style.map('Special.TButton', background=[('active', '#646464')])
+style.map('Normal.TButton', background=[('active', '#646464')])
 
+input_frame = Frame(root, bg="#0e0d0d", relief=SOLID, bd=3)
+input_frame.grid(row=0, column=0, columnspan=4, padx=20, pady=20, sticky="ew")
+
+input_field = Entry(input_frame, 
+                   font=('Arial', 35, 'bold'),  # Ariel → Arial
+                   width=22, justify=RIGHT,
+                   bg='#1a1a2e', fg="#616161",
+                   insertbackground='#616161',
+                   relief=FLAT, bd=0,
+                   highlightthickness=0)
+input_field.pack(fill=X, ipady=20, ipadx=10)
 
 special_buttons = [
     ('⌦', backspace, 1, 0),
@@ -148,18 +159,16 @@ normal_buttons = [
     ('1', 4, 0), ('2', 4, 1), ('3', 4, 2), ('+', 4, 3),
     ('0', 5, 1), ('.', 5, 2)
 ]
-for text, func, row, col in special_buttons:
 
-    Button(root, text=text, padx=20, pady=20, font=('Arial', 22),
-           command=func, bg='white', relief=RAISED, bd=2)\
-    .grid(row=row, column=col, padx=3, pady=3, sticky="nsew")
+for text, func, row, col in special_buttons:
+    btn = ttk.Button(root, text=text, style='Special.TButton',
+                    width=8, command=func)  
+    btn.grid(row=row, column=col, padx=3, pady=3, sticky="nsew")
 
 for text, row, col in normal_buttons:
-
-    Button(root, text=text, padx=20, pady=20, font=('Arial', 22),
-           command=lambda t=text: click_button(t), 
-           bg='white', relief=RAISED, bd=2)\
-    .grid(row=row, column=col, padx=3, pady=3, sticky="nsew")
+    btn = ttk.Button(root, text=text, style='Normal.TButton',
+                    width=8, command=lambda t=text: click_button(t))
+    btn.grid(row=row, column=col, padx=3, pady=3, sticky="nsew")
 
 for i in range(4):
     root.grid_columnconfigure(i, weight=1)
